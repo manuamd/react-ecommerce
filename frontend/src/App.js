@@ -1,11 +1,12 @@
 // src/App.js
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import ProductCard from './components/ProductCard';
-import ProductDetail from './components/ProductDetail';
-import products from './products'; // Import the products array
-import './styles/App.css'; // Import the CSS styles
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import ProductCard from "./components/ProductCard";
+import ProductDetail from "./components/ProductDetail";
+import products from "./products"; // Import the products array
+import "./styles/App.css"; // Import the CSS styles
+import Dashboard from "./admin/pages/Dashboard";
 
 const Home = () => {
   return (
@@ -16,7 +17,10 @@ const Home = () => {
       <div className="row">
         {products.map((product) => (
           <div key={product.id} className="col-md-4">
-            <Link to={`/products/${product.id}`} className="text-decoration-none">
+            <Link
+              to={`/products/${product.id}`}
+              className="text-decoration-none"
+            >
               <ProductCard product={product} />
             </Link>
           </div>
@@ -37,6 +41,7 @@ const App = () => {
             path="/products/:id"
             element={<ProductDetail products={products} />}
           />
+          <Route path="/admin/*" element={<Dashboard />} />
         </Routes>
       </Router>
     </div>
