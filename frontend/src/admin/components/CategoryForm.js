@@ -1,16 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Button, Stack } from "@mui/material";
 
+
 const CategoryForm = ({ initialValues, onSubmit }) => {
-  const [categoryName, setCategoryName] = useState(
-    initialValues?.categoryName || ""
-  );
+
+  const [isEditing, setIsEditing] = useState(!!initialValues);
+  const [categoryData, setCategoryData] = useState({
+    categoryName: "",
+    ...initialValues,
+  });
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    // When initialValues prop changes (e.g., when in edit mode), update the form state
+    setIsEditing(!!initialValues);
+    setCategoryData({ categoryName: "", ...initialValues });
+  }, [initialValues]);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setCategoryData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const resetForm = () => {
+    setIsEditing(false);
+    setCategoryData({ categoryName: "" });
+    setError(""); 
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = { categoryName };
+
+    if (categoryData.categoryName.trim() === "") {
+      setError("Category name cannot be empty");
+      return;
+    }
+
+    const data = { ...categoryData };
     onSubmit(data);
-    setCategoryName("");
+    resetForm(); // Reset form after submission
   };
 
   return (
@@ -19,12 +50,18 @@ const CategoryForm = ({ initialValues, onSubmit }) => {
         <TextField
           label="Category Name"
           variant="outlined"
-          value={categoryName}
-          onChange={(e) => setCategoryName(e.target.value)}
+          name="categoryName"
+          value={categoryData.categoryName}
+          onChange={handleChange}
           fullWidth
+          error={!!error}
+          helperText={error}
         />
         <Button type="submit" variant="contained" color="primary">
-          Save
+          {isEditing ? "Update" : "Save"}
+        </Button>
+        <Button type="button" onClick={resetForm} variant="contained" color="warning">
+          Reset
         </Button>
       </Stack>
     </form>

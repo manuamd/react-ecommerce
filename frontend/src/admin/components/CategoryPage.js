@@ -6,7 +6,7 @@ import api from "../services/api";
 
 const CategoryPage = () => {
   const [categories, setCategories] = useState([]);
-
+  const [selectedCategory, setSelectedCategory] = useState(null); // State to hold the selected category
   const fetchCategories = async () => {
     try {
       const response = await api.get("/categories");
@@ -22,7 +22,14 @@ const CategoryPage = () => {
 
   const handleCategorySubmit = async (data) => {
     try {
-      await api.post("/categories", data);
+      if(data.categoryId) {
+        await api.put(`/categories/${data.categoryId}`,  {
+          categoryName: data.categoryName,
+        });
+      } else {
+        await api.post("/categories", data);
+      }
+  
       fetchCategories();
     } catch (error) {
       console.error("Error creating category:", error);
@@ -41,29 +48,27 @@ const CategoryPage = () => {
     }
   };
 
-  // Function to handle delete button click
-  const handleDelete = (categoryId) => {
-    onDeleteCategory(categoryId);
-  };
-
   // Function to handle edit button click
   const handleEdit = (category) => {
-    //setSelectedCategory(category);
+    console.log("Update category:", category);
+    setSelectedCategory(category);
   };
 
+
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} sx={{ padding: "20px" }}>
       <Grid item xs={12}>
         <Typography variant="h5">Category Management</Typography>
       </Grid>
       <Grid item xs={6}>
-        <CategoryForm onSubmit={handleCategorySubmit} />
+        <CategoryForm onSubmit={handleCategorySubmit}     
+          initialValues={selectedCategory} />
       </Grid>
       <Grid item xs={12}>
         <CategoryHistoryTable
           categories={categories}
           onEdit={handleEdit}
-          onDelete={handleDelete}
+          onDelete={onDeleteCategory}
         />
       </Grid>
     </Grid>
