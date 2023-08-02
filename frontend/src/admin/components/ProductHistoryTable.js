@@ -10,8 +10,9 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
-const ProductHistoryTable = ({ products, onDelete }) => {
+const ProductHistoryTable = ({ products, onEdit, onDelete }) => {
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -21,6 +22,7 @@ const ProductHistoryTable = ({ products, onDelete }) => {
             <TableCell>Description</TableCell>
             <TableCell>Price</TableCell>
             <TableCell>Category</TableCell>
+            <TableCell>Image Url</TableCell>
             <TableCell>Action</TableCell>
           </TableRow>
         </TableHead>
@@ -31,7 +33,16 @@ const ProductHistoryTable = ({ products, onDelete }) => {
               <TableCell>{product.description}</TableCell>
               <TableCell>${product.price}</TableCell>
               <TableCell>{product.categoryName}</TableCell>
+              <TableCell>{product.imageUrl}</TableCell>
               <TableCell>
+                <IconButton
+                  onClick={() => {
+                    onEdit(product);
+                  }}
+                  color="secondary"
+                >
+                  <EditIcon />
+                </IconButton>
                 <IconButton
                   onClick={() => onDelete(product.id)}
                   color="secondary"

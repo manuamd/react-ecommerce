@@ -9,18 +9,38 @@ import {
   MenuItem,
 } from "@mui/material";
 
-const ProductForm = ({ categories, onSubmit }) => {
-  const [productName, setProductName] = useState("");
-  const [productDescription, setProductDescription] = useState("");
-  const [productPrice, setProductPrice] = useState("");
-  const [selectedCategoryId, setSelectedCategoryId] = useState("");
+const ProductForm = ({ categories, onSubmit, initialValues }) => {
+  // Use local state for form fields
+  const [productName, setProductName] = useState(
+    initialValues?.name || "" // Set initial value for name field
+  );
+  const [productDescription, setProductDescription] = useState(
+    initialValues?.description || "" // Set initial value for description field
+  );
+  const [productPrice, setProductPrice] = useState(
+    initialValues?.price || "" // Set initial value for price field
+  );
+  const [selectedCategoryId, setSelectedCategoryId] = useState(
+    initialValues?.categoryId || "" // Set initial value for categoryId field
+  );
+  const [imageUrl, setImageUrl] = useState(
+    initialValues?.imageUrl || "" // Set initial value for categoryId field
+  );
+  const [selectedProductId, setSelectedProductId] = useState(
+    initialValues?.id || "" // Set initial value for categoryId field
+  );
 
-  // Set the initial value for selectedCategoryId when the categories array changes
+  // Update form fields' values when initialValues prop changes
   useEffect(() => {
-    if (categories.length > 0) {
-      setSelectedCategoryId(null);
+    if (initialValues) {
+      setProductName(initialValues.name || "");
+      setProductDescription(initialValues.description || "");
+      setProductPrice(initialValues.price || "");
+      setSelectedCategoryId(initialValues.categoryId || "");
+      setImageUrl(initialValues.imageUrl || "");
+      setSelectedProductId(initialValues.id || null);
     }
-  }, [categories]);
+  }, [initialValues]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -29,11 +49,20 @@ const ProductForm = ({ categories, onSubmit }) => {
       description: productDescription,
       price: productPrice,
       categoryId: selectedCategoryId,
+      id: selectedProductId,
+      imageUrl: imageUrl,
     };
     onSubmit(data);
+    resetForm();
+  };
+
+  const resetForm = () => {
     setProductName("");
     setProductDescription("");
     setProductPrice("");
+    setSelectedCategoryId("");
+    setImageUrl("");
+    setSelectedProductId(null);
   };
 
   return (
@@ -61,6 +90,13 @@ const ProductForm = ({ categories, onSubmit }) => {
           onChange={(e) => setProductPrice(e.target.value)}
           fullWidth
         />
+        <TextField
+          label="Image Url"
+          variant="outlined"
+          value={imageUrl}
+          onChange={(e) => setImageUrl(e.target.value)}
+          fullWidth
+        />
         <FormControl variant="outlined" fullWidth>
           <InputLabel>Category</InputLabel>
           <Select
@@ -77,6 +113,14 @@ const ProductForm = ({ categories, onSubmit }) => {
         </FormControl>
         <Button type="submit" variant="contained" color="primary">
           Save
+        </Button>
+        <Button
+          type="button"
+          onClick={resetForm}
+          variant="contained"
+          color="warning"
+        >
+          Reset
         </Button>
       </Stack>
     </form>

@@ -1,19 +1,29 @@
-const products = [
-    {
-      id: 1,
-      name: "Product 1",
-      description: "This is the description of Product 1.",
-      price: 19.99,
-      image: "path/to/product1.jpg",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      description: "This is the description of Product 2.",
-      price: 29.99,
-      image: "path/to/product2.jpg",
-    },
-    // Add more products as needed
-  ];
-  
-  export default products;
+import { useState, useEffect } from "react";
+
+const API_BASE_URL = "http://localhost:5000/api"; // Replace with your backend API base URL
+
+const useProducts = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Function to fetch products from the backend API
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(API_BASE_URL + "/products"); // Replace with your backend API endpoint
+        const data = await response.json();
+        setProducts(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  return { products, loading };
+};
+
+export default useProducts;

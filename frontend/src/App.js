@@ -4,16 +4,18 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ProductCard from "./components/ProductCard";
 import ProductDetail from "./components/ProductDetail";
-import products from "./products"; // Import the products array
+import useProducts from "./products";
 import "./styles/App.css"; // Import the CSS styles
 import Dashboard from "./admin/pages/Dashboard";
 
 const Home = () => {
+  const { products, loading } = useProducts();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="container">
-      <h1>Welcome to Our E-commerce Store!</h1>
-      <p>Explore our amazing products and find great deals.</p>
-
       <div className="row">
         {products.map((product) => (
           <div key={product.id} className="col-md-4">
@@ -37,10 +39,7 @@ const App = () => {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route
-            path="/products/:id"
-            element={<ProductDetail products={products} />}
-          />
+          <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/admin/*" element={<Dashboard />} />
         </Routes>
       </Router>

@@ -7,6 +7,7 @@ import api from "../services/api";
 const ProductPage = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     // Fetch categories from the backend API
@@ -22,12 +23,27 @@ const ProductPage = () => {
 
   const handleProductSubmit = (data) => {
     // Send the product data to the backend API to create a new product
-    api.post("/products", data).then((response) => {
-      // Refresh the products list after creating a new product
-      api.get("/products").then((response) => {
-        setProducts(response.data);
+    if (data.id) {
+      api.put(`/products/${data.id}`, data).then((response) => {
+        setSelectedProduct(null);
+        // Refresh the products list after creating a new product
+        api.get("/products").then((response) => {
+          setProducts(response.data);
+        });
       });
-    });
+    } else {
+      api.post("/products", data).then((response) => {
+        setSelectedProduct(null);
+        // Refresh the products list after creating a new product
+        api.get("/products").then((response) => {
+          setProducts(response.data);
+        });
+      });
+    }
+  };
+
+  const handleEditProduct = (product) => {
+    setSelectedProduct(product);
   };
 
   const handleDeleteProduct = (productId) => {
@@ -46,10 +62,18 @@ const ProductPage = () => {
         <Typography variant="h5">Product Management</Typography>
       </Grid>
       <Grid item xs={6}>
-        <ProductForm categories={categories} onSubmit={handleProductSubmit} />
+        <ProductForm
+          categories={categories}
+          onSubmit={handleProductSubmit}
+          initialValues={selectedProduct}
+        />
       </Grid>
       <Grid item xs={12}>
-        <ProductHistoryTable products={products} onDelete={handleDeleteProduct} />
+        <ProductHistoryTable
+          products={products}
+          onEdit={handleEditProduct}
+          onDelete={handleDeleteProduct}
+        />
       </Grid>
     </Grid>
   );

@@ -15,6 +15,11 @@ const AdminSideBar = () => {
               Category
             </Link>
           </li>
+          <li>
+            <Link to="/admin/products" className="nav-link">
+              Product
+            </Link>
+          </li>
         </ul>
       </div>
     </nav>
