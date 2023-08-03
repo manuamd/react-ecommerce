@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { TextField, Button, Stack, Typography } from '@mui/material';
-import UserModel from '../models/UserModel'
+import React, { useState } from "react";
+import { TextField, Button, Stack, Typography } from "@mui/material";
+import UserModel from "../models/UserModel";
 
 import * as constants from "../Constants";
 
@@ -12,21 +12,21 @@ const RegisterPage = () => {
 
     // Validate password length and match
     if (user.password.length < 8) {
-      alert('Password must be at least 8 characters long.');
+      alert("Password must be at least 8 characters long.");
       return;
     }
 
     if (user.password !== user.confirmPassword) {
-      alert('Passwords do not match.');
+      alert("Passwords do not match.");
       return;
     }
 
     try {
       // Call the register user API
-      const response = await fetch(constants.API_BASE_URL + '/users', {
-        method: 'POST',
+      const response = await fetch(constants.API_BASE_URL + "/users", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(user),
       });
@@ -35,15 +35,14 @@ const RegisterPage = () => {
       if (response.status === 201) {
         setUser({ ...UserModel });
         // Replace the next line with the URL of your thank you page
-        window.location.href = '/thankyou';
+        window.location.href = "/registered";
       }
     } catch (error) {
       // If there's an error with the registration, display an error message
       console.error(error);
       // Display an error message to the user (you can implement this in your UI)
-      alert('Error registering user. Please try again.');
+      alert("Error registering user. Please try again.");
     }
-
   };
 
   const handleChange = (name, value) => {
@@ -59,7 +58,7 @@ const RegisterPage = () => {
             label="First Name"
             variant="outlined"
             value={user.firstName}
-            onChange={(e) => handleChange('firstName', e.target.value)}
+            onChange={(e) => handleChange("firstName", e.target.value)}
             fullWidth
             required
           />
@@ -67,7 +66,7 @@ const RegisterPage = () => {
             label="Last Name"
             variant="outlined"
             value={user.lastName}
-            onChange={(e) => handleChange('lastName', e.target.value)}
+            onChange={(e) => handleChange("lastName", e.target.value)}
             fullWidth
             required
           />
@@ -75,7 +74,7 @@ const RegisterPage = () => {
             label="Address"
             variant="outlined"
             value={user.address}
-            onChange={(e) => handleChange('address', e.target.value)}
+            onChange={(e) => handleChange("address", e.target.value)}
             fullWidth
             required
           />
@@ -83,7 +82,7 @@ const RegisterPage = () => {
             label="Mobile"
             variant="outlined"
             value={user.mobile}
-            onChange={(e) => handleChange('mobile', e.target.value)}
+            onChange={(e) => handleChange("mobile", e.target.value)}
             fullWidth
             required
           />
@@ -92,7 +91,7 @@ const RegisterPage = () => {
             type="email"
             variant="outlined"
             value={user.email}
-            onChange={(e) => handleChange('email', e.target.value)}
+            onChange={(e) => handleChange("email", e.target.value)}
             fullWidth
             required
           />
@@ -100,7 +99,7 @@ const RegisterPage = () => {
             label="Username"
             variant="outlined"
             value={user.username}
-            onChange={(e) => handleChange('username', e.target.value)}
+            onChange={(e) => handleChange("username", e.target.value)}
             fullWidth
             required
           />
@@ -109,7 +108,7 @@ const RegisterPage = () => {
             type="password"
             variant="outlined"
             value={user.password}
-            onChange={(e) => handleChange('password', e.target.value)}
+            onChange={(e) => handleChange("password", e.target.value)}
             fullWidth
             required
           />
@@ -120,7 +119,7 @@ const RegisterPage = () => {
             type="password"
             name="confirmPassword"
             value={user.confirmPassword}
-            onChange={(e) => handleChange('confirmPassword', e.target.value)}
+            onChange={(e) => handleChange("confirmPassword", e.target.value)}
             fullWidth
             required
           />
