@@ -1,8 +1,22 @@
 // components/Navbar.js
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { CartContext } from "./CartContext";
+import { useAuth } from '../components/AuthContext';
 
 const Navbar = () => {
+  const { isLoggedIn, username, logout } = useAuth();                                     
+
+  const { cartItems } = useContext(CartContext);
+
+  const [totalItems, setTotalItems] = useState(0);
+
+  // Calculate the total quantity of items in the cart when cartItems change
+  useEffect(() => {
+    const total = cartItems.reduce((total, item) => total + item.quantity, 0);
+    setTotalItems(total);
+  }, [cartItems]);
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <Link to="/" className="navbar-brand">
@@ -22,11 +36,28 @@ const Navbar = () => {
           </li>
           <li className="nav-item">
             <Link to="/cart" className="nav-link">
-              <i className="bi bi-cart3"></i> Cart
+              <i className="bi bi-cart3"></i> Cart {totalItems > 0 && <span className="badge bg-secondary">{totalItems}</span>}
             </Link>
           </li>
           {/* Add more links for other pages as needed */}
         </ul>
+        {!isLoggedIn ? (
+          <div className="d-flex">
+            <Link to="/login" className="btn btn-primary me-2">
+              Login
+            </Link>
+            <Link to="/register" className="btn btn-secondary">
+              Register
+            </Link>
+          </div>
+        ) : (
+          <div className="d-flex">
+            <div className="me-3 text-white">Hi, {username}</div>
+            <button className="btn btn-secondary" onClick={logout}>
+              Logout
+            </button>
+          </div>
+        )}
       </div>
     </nav>
   );

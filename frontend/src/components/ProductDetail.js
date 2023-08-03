@@ -25,9 +25,9 @@ const ProductDetail = () => {
     fetchProductById();
   }, [id]);
 
-  // Handle cases when the product is not found
+  //Handle cases when the product is not found
   if (!product) {
-    return <div>Product not found</div>;
+    return <div>Loading.....</div>;
   }
 
   return (
