@@ -1,6 +1,6 @@
 // src/App.js
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link , useLocation} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ProductCard from "./components/ProductCard";
 import ProductDetail from "./components/ProductDetail";
@@ -35,6 +35,7 @@ const Home = () => {
 };
 
 const App = () => {
+
   return (
     <CartProvider> {/* Wrap the app with the CartProvider */}
     <div>

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link,useLocation  } from "react-router-dom";
 import { CartContext } from "./CartContext";
 import { useAuth } from "./AuthContext";
 import {
@@ -14,6 +14,9 @@ import { Home, ShoppingCart, ExitToApp, Person } from "@mui/icons-material";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 
 const Navbar = () => {
+  const location = useLocation();
+  const hideNavbar = location.pathname.indexOf('/admin') > -1;
+
   const { cartItems } = useContext(CartContext);
   const { isLoggedIn, username, logout } = useAuth();
 
@@ -21,6 +24,10 @@ const Navbar = () => {
     (total, item) => total + item.quantity,
     0
   );
+
+  if (hideNavbar) {
+    return null;
+  }
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "#343a40" }}>

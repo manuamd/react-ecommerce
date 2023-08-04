@@ -67,6 +67,7 @@ const CheckoutPage = () => {
       lastName: lastName,
       mobile: mobile,
       address: address,
+      username: username
     };
 
     const checkoutData = {
